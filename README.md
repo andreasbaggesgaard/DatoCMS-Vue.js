@@ -1,6 +1,6 @@
-# datocms
+# DatoCMS & Vue.js
 
-> datocms + vue.js
+> DatoCMS as the backend and Vue.js as the frontend
 
 ## Build Setup
 
