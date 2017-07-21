@@ -1,0 +1,80 @@
+{
+  "article": [
+    {
+      "id": "82079",
+      "itemType": "article",
+      "updatedAt": "2017-07-21T07:34:29.476Z",
+      "imageGallery": [],
+      "image": {
+        "format": "png",
+        "size": 2187374,
+        "width": 1720,
+        "height": 1330,
+        "title": null,
+        "alt": null,
+        "url": "https://www.datocms-assets.com/2765/1500622446-lystrup.png?"
+      },
+      "text": "asdadasd",
+      "title": "Hey"
+    },
+    {
+      "id": "82092",
+      "itemType": "article",
+      "updatedAt": "2017-07-21T07:58:04.205Z",
+      "imageGallery": [],
+      "image": null,
+      "text": "asdasd",
+      "title": "test"
+    },
+    {
+      "id": "82107",
+      "itemType": "article",
+      "updatedAt": "2017-07-21T09:05:54.789Z",
+      "imageGallery": [],
+      "image": null,
+      "text": "sef",
+      "title": "yo"
+    },
+    {
+      "id": "82147",
+      "itemType": "article",
+      "updatedAt": "2017-07-21T09:50:42.773Z",
+      "imageGallery": [],
+      "image": null,
+      "text": "ma friend",
+      "title": "sup"
+    }
+  ],
+  "settings": {
+    "id": "2765",
+    "name": "mycmsdato",
+    "locales": [
+      "en"
+    ],
+    "themeHue": 190,
+    "domain": null,
+    "internalDomain": "mycmsdato.admin.datocms.com",
+    "noIndex": false,
+    "globalSeo": {
+      "siteName": "datocms",
+      "titleSuffix": "datocms",
+      "facebookPageUrl": null,
+      "twitterAccount": null,
+      "fallbackSeo": {
+        "title": "datocms",
+        "description": "hello",
+        "image": null
+      }
+    },
+    "favicon": null,
+    "faviconMetaTags": [
+      {
+        "tagName": "meta",
+        "attributes": {
+          "name": "application-name",
+          "content": "mycmsdato"
+        }
+      }
+    ]
+  }
+}
