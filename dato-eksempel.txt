@@ -1,0 +1,69 @@
+const fs = require('fs')
+const OS = require('os')
+
+module.exports = (dato, root, i18n) => {
+  console.log(`
+  `)
+  i18n.availableLocales.forEach(locale => {
+
+    i18n.locale = locale
+    var data = {}
+
+    dato.singleInstanceItemTypes.forEach(itemType => {
+      const item = dato.itemsOfType(itemType)[0]
+      if (item) {
+        data[itemType.apiKey] = item.toMap()
+        delete data[itemType.apiKey].seoMetaTags
+      }
+    })
+
+    dato.collectionItemTypes.forEach(itemType => {
+
+      const item = dato.itemsOfType(itemType)[0]
+
+      if (item) {
+        data[itemType.apiKey] = []
+
+        dato.itemsOfType(itemType).forEach(item => {
+
+          var itemMap = item.toMap()
+          delete itemMap.seoMetaTags
+          data[itemType.apiKey].push(itemMap)
+        })
+
+      }
+
+    })
+
+    // Add site settings
+    data.settings = dato.site.toMap()
+
+    root.createDataFile(`src/data/${locale}-data-dev.json`, 'json', data)
+    root.createDataFile(`public/data/${locale}-data.json`, 'json', JSON.stringify(data))
+
+    createRobotTxt({robotsAllowed: data.settings.noIndex})
+
+  })
+
+}
+
+const createRobotTxt = (args) => {
+
+  console.log('Creating robots.txt file...')
+
+  var fileStream = fs.createWriteStream('public/robots.txt', { defaultEncoding: 'utf8' })
+  
+  const robotsAllowed = args.robotsAllowed ? 'Disallow: /' : 'Allow: /'
+
+  fileStream.write(`User-agent: *${OS.EOL}`)
+  fileStream.write(`${robotsAllowed}${OS.EOL}`)
+
+  fileStream.end()
+
+  console.log('robots.txt created')
+
+}
+
+
+
+
