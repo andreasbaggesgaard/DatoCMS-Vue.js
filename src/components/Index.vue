@@ -12,23 +12,25 @@
             <div v-for="item in items" class="col showcase__item">
 
                 <figure>
-                  <div v-if="item.imageGallery" v-for="(img, index) in item.imageGallery">
-                      <img v-bind:src="'https://www.datocms-assets.com' + removeMarks(JSON.stringify(img.path))" v-bind:alt="img.alt" v-if="index == 0" v-on:mouseover="showInfo(item.title)" v-on:mouseleave="hideInfo" />
+                  <div v-for="(img, index) in item.imageGallery" v-bind:class="item.title" v-if="index == 0">
+                      <img v-bind:src="'https://www.datocms-assets.com' + removeMarks(JSON.stringify(img.path))" 
+                      v-bind:alt="img.alt" v-bind:id="item.title" v-if="index == 0" 
+                      v-on:mouseover="showInfo(item.title)" v-on:mouseleave="hideInfo"  />
                   </div>
 
                   <div class="showcase__images">                        
-                      <div v-if="showArticleImages == item.title" v-bind:id="item.title">
+                      <div v-if="showArticleImages == item.title">
                 
-                            <div v-for="(img, index) in item.imageGallery">
-                              <img v-bind:src="'https://www.datocms-assets.com' + removeMarks(JSON.stringify(img.path))" v-bind:alt="img.alt" class="showcase__images-img" />
-                            </div> 
+                            <div v-for="img in item.imageGallery">{{addImagesToSlider(img)}}</div> 
                             
+                            <ImageSlider :images="sliderImages" :id="item.title"></ImageSlider>
+
                         </div>
                     </div>
                   
                     <div class="showcase__text">
-                      <h6>{{item.title}}</h6>
-                      <p>{{item.text}}</p>
+                        <h6>{{item.title}}</h6>
+                        <p>{{item.text}}</p>
                     </div> 
                 </figure>
 
@@ -44,6 +46,7 @@
 <script>
 import * as cms from '@/backend.js';
 import navbar from '@/components/Navbar' 
+import ImageSlider from '@/components/ImageSlider' 
 import Masonry from 'masonry-layout';
 import imagesLoaded from 'imagesloaded';
 
@@ -51,53 +54,57 @@ export default {
   name: 'index',
   data () {
     return {
-      list: [], 
       allItems: cms.GetAllItems(),
       items: cms.GetItems(),
-      showArticleImages: ''
+      showArticleImages: '',
+      firstImage: '',
+      sliderImages: []
     }
   },
   created:  function() {
 
-
-
      window.setTimeout(function() {
-            const selector = '.showcase';
+        const selector = '.showcase';
         const itemSelector = '.showcase__item';
-      const showcase = document.querySelector(selector);
+        const showcase = document.querySelector(selector);
         imagesLoaded(showcase).on('always', (instance, image) => {
-        console.log('images loaded')
-        //var result = image.isLoaded ? 'loaded' : 'broken';
-        //console.log( 'image is ' + result + ' for ' + image.img.src );
-        showcase.classList.remove('is-loading');
-        //  percentPosition: true
-        const masonry = new Masonry(showcase, { itemSelector });
-        //masonry.appended(newItems);
-        masonry.layout();
-
-          });
-
-        }, 1);
-      
+          //console.log('images loaded')
+          showcase.classList.remove('is-loading');
+          //  percentPosition: true
+          const masonry = new Masonry(showcase, { itemSelector });
+          //masonry.appended(newItems);
+          masonry.layout();
+        });
+      }, 1);    
   },
   methods: {
       removeMarks: function(text){
-          let newString = text
+          let newString = text;
           return newString.toString().replace(/"/g, "");
       },
       showInfo: function(obj){
-            this.showArticleImages = obj                  
-      },
-      startSlideShow: function(){
-       
-          
+          //console.log(obj)
+          this.showArticleImages = obj;   
+          this.firstImage = jQuery('#' + obj).attr('src');
+
+          setInterval(function(){
+            let teaserImage = jQuery('#' + obj);
+            let sliderImages = jQuery('.imageslider__img#' + obj).attr('src');
+            teaserImage.attr('src', sliderImages)
+          }, 300);         
       },
       hideInfo: function(obj){
-          this.showArticleImages = ''               
+          this.showArticleImages = '';
+          this.sliderImages = []; 
+          jQuery('#' + obj.fromElement.id).attr('src', this.firstImage);
       },
+      addImagesToSlider: function(image){
+          this.sliderImages.push("https://www.datocms-assets.com" + this.removeMarks(JSON.stringify(image.path)));
+      }
   },
    components: {
-    navbar
+    navbar,
+    ImageSlider
   }
 }
 </script> 
@@ -131,6 +138,9 @@ figure img {
     box-shadow: 0 0 5px #ccc;
     background: white;
     margin-bottom: 30px;
+}
+.showcase__item img:hover {
+  cursor: pointer;
 }
 .showcase__text {
   padding: 20px;
